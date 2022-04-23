@@ -6,6 +6,9 @@ import com.bridgelabz.employeepayrollservice.model.Employee;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *  Here we create an interface having some methods which we implement in EmployeePayrollService
+ */
 public interface IEmployeePayrollService {
     String getMessage(String name);
 
