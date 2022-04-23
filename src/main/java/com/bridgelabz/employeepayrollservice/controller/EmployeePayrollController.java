@@ -1,6 +1,8 @@
 package com.bridgelabz.employeepayrollservice.controller;
 
 
+import com.bridgelabz.employeepayrollservice.dto.EmployeeDTO;
+import com.bridgelabz.employeepayrollservice.dto.ResponseDTO;
 import com.bridgelabz.employeepayrollservice.model.Employee;
 import com.bridgelabz.employeepayrollservice.service.IEmployeePayrollService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,47 +18,42 @@ public class EmployeePayrollController {
     @Autowired
     IEmployeePayrollService service;
 
-    @GetMapping("/getMessage")
-    public ResponseEntity<String> getMessage(@RequestParam String name) {
-        return new ResponseEntity<String>(service.getMessage(name), HttpStatus.OK);
-    }
 
-    @PostMapping("/postMessage")
-    public ResponseEntity<Employee> postMessage(@RequestBody Employee employee) {
-        return new ResponseEntity<Employee>(service.postMessage(employee), HttpStatus.OK);
-    }
-
-    //ability to display welcome message
+    //Ability to display welcome message
     @GetMapping("/employeePayrollService")
     public ResponseEntity<String> getWelcome() {
         return new ResponseEntity<String>(service.getWelcome(), HttpStatus.OK);
     }
 
-    //ability to save employee details to repository
+    //Ability to save employee details to repository
     @PostMapping("/employeePayrollService/create")
-    public ResponseEntity<Employee> saveDataToRepo(@RequestBody Employee employee) {
+    public ResponseEntity<Employee> saveDataToRepo(@RequestBody EmployeeDTO employee) {
         return new ResponseEntity<Employee>(service.postDataToRepo(employee), HttpStatus.OK);
     }
 
-    //ability to get all employees' data by findAll() method
+    //Ability to get all employees' data by findAll() method
     @GetMapping("/employeePayrollService/get")
     public ResponseEntity<List<Employee>> getAllDataFromRepo() {
         return new ResponseEntity<List<Employee>>(service.getAllData(), HttpStatus.OK);
     }
 
-    //ability to get employee data by id
+    //Ability to get employee data by id
     @GetMapping("/employeePayrollService/get/{id}")
-    public ResponseEntity<Optional<Employee>> getDataFromRepoById(@PathVariable Integer id) {
-        return new ResponseEntity<Optional<Employee>>(service.getDataById(id), HttpStatus.OK);
+    public ResponseEntity<Employee> getDataFromRepoById(@PathVariable Integer id) {
+        Optional<Employee> employee = service.getDataById(id);
+        ResponseDTO dto = new ResponseDTO("Data",employee);
+        return new ResponseEntity(dto, HttpStatus.OK);
     }
 
-    //ability to update employee data for particular id
+    //Ability to update employee data for particular id
     @PutMapping("/employeePayrollService/update/{id}")
-    public ResponseEntity<Employee> updateDataInRepo(@PathVariable Integer id, @RequestBody Employee employee) {
-        return new ResponseEntity<Employee>(service.updateDataById(id, employee), HttpStatus.OK);
+    public ResponseEntity<String> updateDataInRepo(@PathVariable Integer id, @RequestBody EmployeeDTO employeeDTO) {
+        Employee employee = service.updateDataById(id, employeeDTO);
+        ResponseDTO responseDTO = new ResponseDTO("Updating Employee PayrollData Successfuly:", employee);
+        return new ResponseEntity(employeeDTO, HttpStatus.OK);
     }
 
-    //ability to delete employee data for particular id
+    //Ability to delete employee data for particular id
     @DeleteMapping("/employeePayrollService/delete/{id}")
     public ResponseEntity<String> deleteDataInRepo(@PathVariable Integer id) {
         return new ResponseEntity<String>(service.deleteDataById(id), HttpStatus.OK);

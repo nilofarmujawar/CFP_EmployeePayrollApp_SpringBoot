@@ -1,8 +1,9 @@
 package com.bridgelabz.employeepayrollservice.model;
 
+import com.bridgelabz.employeepayrollservice.dto.EmployeeDTO;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
@@ -11,6 +12,7 @@ public class Employee {
     @Id
     @GeneratedValue
     private Integer id;
+
     private String firstName;
     private String lastName;
     private String profilePic;
@@ -19,33 +21,32 @@ public class Employee {
     private LocalDate date;
     private String notes;
 
-    public Employee(Integer id, String firstName, String lastName, String profilePic, String department, Long salary,
-                    LocalDate date, String notes) {
-        super();
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.profilePic = profilePic;
-        this.department = department;
-        this.salary = salary;
-        this.date = date;
-        this.notes = notes;
-    }
 
     public Employee() {
+
         super();
     }
 
-    public Employee(Employee employee) {
-        super();
-        this.id = employee.id;
-        this.firstName = employee.firstName;
-        this.lastName = employee.lastName;
-        this.profilePic = employee.profilePic;
-        this.department = employee.department;
-        this.salary = employee.salary;
-        this.date = employee.date;
-        this.notes = employee.notes;
+    public Employee(EmployeeDTO employee) {
+
+        this.firstName = employee.getFirstName();
+        this.lastName = employee.getLastName();
+        this.profilePic = employee.getProfilePic();
+        this.department = employee.getDepartment();
+        this.salary = employee.getSalary();
+        this.date = employee.getDate();
+        this.notes = employee.getNotes();
+    }
+
+    public Employee(Integer id, EmployeeDTO employeeDTO) {
+        this.id = id;
+        this.firstName = employeeDTO.getFirstName();
+        this.lastName = employeeDTO.getLastName();
+        this.profilePic = employeeDTO.getProfilePic();
+        this.department = employeeDTO.getDepartment();
+        this.salary = employeeDTO.getSalary();
+        this.date = employeeDTO.getDate();
+        this.notes = employeeDTO.getNotes();
     }
 
     public Integer getId() {
