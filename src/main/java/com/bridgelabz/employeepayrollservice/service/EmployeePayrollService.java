@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeePayrollService implements IEmployeePayrollService {
@@ -17,7 +18,7 @@ public class EmployeePayrollService implements IEmployeePayrollService {
         return "Welcome To Employee Program " + name;
     }
 
-    public String postMessage(Employee employee) {
+    public String postMessage(EmployeeDTO employee) {
         return "Hello Employee " + employee.getFirstName() + "" + employee.getLastName() + "!";
     }
 
@@ -30,7 +31,7 @@ public class EmployeePayrollService implements IEmployeePayrollService {
     }
 
     @Override
-    public Employee postDataToRepo(Employee employee) {
+    public Employee postDataToRepo(EmployeeDTO employee) {
         Employee newEmployee = new Employee(employee);
         repository.save(newEmployee);
         return newEmployee;
@@ -43,20 +44,20 @@ public class EmployeePayrollService implements IEmployeePayrollService {
     }
 
     @Override
-    public Employee getDataById(Integer id) {
-        Employee newEmployee = repository.getById(id);
+    public Optional<Employee> getDataById(Integer id) {
+        Optional<Employee> newEmployee = repository.findById(id);
         return newEmployee;
     }
 
-    public Employee updateDataById(Integer id, Employee employee) {
-        Employee newEmployee = new Employee(id, employee);
+    public Employee updateDataById(Integer id, EmployeeDTO employeeDTO) {
+        Employee newEmployee = new Employee(id, employeeDTO);
         repository.save(newEmployee);
         return newEmployee;
     }
 
     public String deleteDataById(Integer id) {
         repository.deleteById(id);
-        return "Employee with ID:" + id + " got deleted";
+        return "Employee with unique ID:" + id + " got deleted";
     }
 
 
