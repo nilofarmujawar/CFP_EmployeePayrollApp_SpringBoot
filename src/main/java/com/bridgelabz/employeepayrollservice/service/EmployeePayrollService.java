@@ -17,9 +17,8 @@ public class EmployeePayrollService implements IEmployeePayrollService {
         return "Welcome To Employee Program " + name;
     }
 
-    public Employee postMessage(Employee employee) {
-        Employee newemployee =new Employee(employee);
-        return repository.save(newemployee);
+    public String postMessage(Employee employee) {
+        return "Hello Employee " + employee.getFirstName() + "" + employee.getLastName() + "!";
     }
 
     public String putMessage(String name) {
@@ -32,8 +31,9 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
     @Override
     public Employee postDataToRepo(Employee employee) {
-        repository.save(employee);
-        return employee;
+        Employee newEmployee = new Employee(employee);
+        repository.save(newEmployee);
+        return newEmployee;
     }
 
     @Override
@@ -43,13 +43,13 @@ public class EmployeePayrollService implements IEmployeePayrollService {
     }
 
     @Override
-    public Optional<Employee> getDataById(Integer id) {
-        Optional<Employee> newEmployee = repository.findById(id);
+    public Employee getDataById(Integer id) {
+        Employee newEmployee = repository.getById(id);
         return newEmployee;
     }
 
     public Employee updateDataById(Integer id, Employee employee) {
-        Employee newEmployee = new Employee(id, employee.getFirstName(), employee.getLastName(), employee.getProfilePic(), employee.getDepartment(), employee.getSalary(), employee.getDate(), employee.getNotes());
+        Employee newEmployee = new Employee(id, employee);
         repository.save(newEmployee);
         return newEmployee;
     }

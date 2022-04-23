@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface IEmployeePayrollService {
     String getMessage(String name);
 
-    Employee postMessage(Employee employee);
+    String postMessage(Employee employee);
 
     String putMessage(String name);
 
@@ -18,7 +18,7 @@ public interface IEmployeePayrollService {
 
     public List<Employee> getAllData();
 
-    public Optional<Employee> getDataById(Integer id);
+    public Employee getDataById(Integer id);
 
     public Employee updateDataById(Integer id, Employee employee);
 
