@@ -1,17 +1,20 @@
 package com.bridgelabz.employeepayrollservice.model;
 
+import java.time.LocalDate;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+
 import com.bridgelabz.employeepayrollservice.dto.EmployeeDTO;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.time.LocalDate;
 @Entity
 @Data
 public class Employee {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String firstName;
@@ -22,24 +25,22 @@ public class Employee {
     private LocalDate date;
     private String notes;
 
-
     public Employee() {
-
         super();
     }
 
-    public Employee(EmployeeDTO employee) {
-
-        this.firstName = employee.getFirstName();
-        this.lastName = employee.getLastName();
-        this.profilePic = employee.getProfilePic();
-        this.department = employee.getDepartment();
-        this.salary = employee.getSalary();
-        this.date = employee.getDate();
-        this.notes = employee.getNotes();
+    public Employee(EmployeeDTO dto) {
+        this.firstName = dto.getFirstName();
+        this.lastName = dto.getLastName();
+        this.profilePic = dto.getProfilePic();
+        this.department = dto.getDepartment();
+        this.salary = dto.getSalary();
+        this.date = dto.getDate();
+        this.notes = dto.getNotes();
     }
 
     public Employee(Integer id, EmployeeDTO employeeDTO) {
+        super();
         this.id = id;
         this.firstName = employeeDTO.getFirstName();
         this.lastName = employeeDTO.getLastName();
