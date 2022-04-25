@@ -1,125 +1,51 @@
 package com.bridgelabz.employeepayrollservice.dto;
 
-/**
- * import class
- */
+import lombok.Data;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 /**
- * create a class name as EmployeeDTO
+ * Created EmployeeDTO class and added validations to fields
+ * @Data :-
+ *        Lombok Data annotation ( @Data ) Generates getters for all fields, a useful toString method,
+ *        and hashCode and equals implementations that check all non-transient fields.
+ *        Will also generate setters for all non-final fields, as well as a constructor.
  */
+@Data
 public class EmployeeDTO {
     /**
-     * private variables can only be accessed within the same class (an outside class has no access to it)
-     * private = restricted access
-     * However, it is possible to access them if we provide public get and set methods.
+     * Regex validation pattern for firstName
+     * [A-Z]{1} - Starting capital letter
+     * [a-zA-Z]{2,} - other letter is 2 or more times
      */
-
-    //variables
+    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$", message = "Employee firstName is Invalid")
     private String firstName;
+    /**
+     * Regex validation pattern for lastname
+     * [A-Z]{1} - Starting capital letter
+     * [a-zA-Z]{2,} - other letter is 2 or more times
+     */
+    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$", message = "Employee lastName is Invalid")
     private String lastName;
+
+    @NotEmpty(message = "ProfilePic cannot be null")
     private String profilePic;
+
+    @NotEmpty(message = "Department name cannot be null")
     private String department;
+
+    @Min(value = 500, message = "Salary should be more than 500")
     private Long salary;
+
+    @PastOrPresent(message = "Date should be past or today date")
     private LocalDate date;
     private String notes;
 
-    /**
-     * create default constructor
-     */
     public EmployeeDTO() {
         super();
     }
-
-    /**
-     * create a parameterized constructor
-     * @param firstName - employee first name
-     * @param lastName - employee last name
-     * @param profilePic - employee profile pic
-     * @param department - employee working department
-     * @param salary - employee salary
-     * @param date - date
-     * @param notes - any notes
-     */
-    public EmployeeDTO(String firstName, String lastName, String profilePic, String department, Long salary,
-                       LocalDate date, String notes) {
-        super();
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.profilePic = profilePic;
-        this.department = department;
-        this.salary = salary;
-        this.date = date;
-        this.notes = notes;
-    }
-
-    /**
-     * Used getter and setter to set and get the value.
-     * Setter is used to set the value
-     * Getter is used to get the value
-     */
-
-    /**
-     * crete a get method name as getFirstName
-     * The get method returns the value of the variable
-     * @return firstName
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-
-    /**
-     * crete a get method name as getLastName
-     * The get method returns the value of the variable
-     * @return lastName
-     */
-    public String getLastName() {
-        return lastName;
-    }
-
-    /**
-     * crete a get method name as getProfilePic
-     * The get method returns the value of the variable
-     * @return profilePic
-     */
-    public String getProfilePic() {
-        return profilePic;
-    }
-
-    /**
-     * crete a get method name as getDepartment
-     * The get method returns the value of the variable
-     * @return department
-     */
-    public String getDepartment() {
-        return department;
-    }
-
-    /**
-     * crete a get method name as getSalary
-     * The get method returns the value of the variable
-     * @return salary
-     */
-    public Long getSalary() {
-        return salary;
-    }
-
-    /**
-     * crete a get method name as getDate
-     * The get method returns the value of the variable
-     * @return data
-     */
-    public LocalDate getDate() {
-        return date;
-    }
-
-    /**
-     * crete a get method name as getNotes
-     * The get method returns the value of the variable
-     * @return notes
-     */
-    public String getNotes() {
-        return notes;
-    }
-
 }

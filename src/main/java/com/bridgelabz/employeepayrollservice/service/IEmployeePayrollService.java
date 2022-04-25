@@ -1,28 +1,21 @@
 package com.bridgelabz.employeepayrollservice.service;
 
+
 import com.bridgelabz.employeepayrollservice.dto.EmployeeDTO;
 import com.bridgelabz.employeepayrollservice.model.Employee;
 
 import java.util.List;
-import java.util.Optional;
 
-/**
- *  Here we create an interface having some methods which we implement in EmployeePayrollService
- */
+//Created IEmployeePayrollService interface to achieve abstraction
 public interface IEmployeePayrollService {
-    String getMessage(String name);
 
-    String postMessage(EmployeeDTO employee);
+    public String getWelcome();
 
-    String putMessage(String name);
-
-    String getWelcome();
-
-    public Employee postDataToRepo(EmployeeDTO employee);
+    public Employee postDataToRepo(EmployeeDTO employeeDTO);
 
     public List<Employee> getAllData();
 
-    public Optional<Employee> getDataById(Integer id);
+    public Employee getDataById(Integer id);
 
     public Employee updateDataById(Integer id, EmployeeDTO employeeDTO);
 
