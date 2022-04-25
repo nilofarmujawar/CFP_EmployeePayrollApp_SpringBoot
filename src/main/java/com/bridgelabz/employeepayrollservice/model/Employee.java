@@ -1,20 +1,22 @@
 package com.bridgelabz.employeepayrollservice.model;
 
-import java.time.LocalDate;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-
 import com.bridgelabz.employeepayrollservice.dto.EmployeeDTO;
 import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.time.LocalDate;
+
+//Map to a database table by name employee
 @Entity
+//Use to bundle features of getter and setter
 @Data
+
+//Created Employee class with different fields
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Integer id;
 
     private String firstName;
@@ -50,68 +52,4 @@ public class Employee {
         this.date = employeeDTO.getDate();
         this.notes = employeeDTO.getNotes();
     }
-
-//    public Integer getId() {
-//        return id;
-//    }
-//
-//    public void setId(Integer id) {
-//        this.id = id;
-//    }
-//
-//    public String getFirstName() {
-//        return firstName;
-//    }
-//
-//    public void setFirstName(String firstName) {
-//        this.firstName = firstName;
-//    }
-//
-//    public String getLastName() {
-//        return lastName;
-//    }
-//
-//    public void setLastName(String lastName) {
-//        this.lastName = lastName;
-//    }
-//
-//    public String getProfilePic() {
-//        return profilePic;
-//    }
-//
-//    public void setProfilePic(String profilePic) {
-//        this.profilePic = profilePic;
-//    }
-//
-//    public String getDepartment() {
-//        return department;
-//    }
-//
-//    public void setDepartment(String department) {
-//        this.department = department;
-//    }
-//
-//    public Long getSalary() {
-//        return salary;
-//    }
-//
-//    public void setSalary(Long salary) {
-//        this.salary = salary;
-//    }
-//
-//    public LocalDate getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(LocalDate date) {
-//        this.date = date;
-//    }
-//
-//    public String getNotes() {
-//        return notes;
-//    }
-//
-//    public void setNotes(String notes) {
-//        this.notes = notes;
-//    }
 }
