@@ -2,14 +2,13 @@ package com.bridgelabz.employeepayrollservice.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
- * Created EmployeeDTO class and added validations to fields
+ * - Created EmployeeDTO class and added validations to fields
+ *
  * @Data :-
  *        Lombok Data annotation ( @Data ) Generates getters for all fields, a useful toString method,
  *        and hashCode and equals implementations that check all non-transient fields.
@@ -24,6 +23,7 @@ public class EmployeeDTO {
      */
     @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$", message = "Employee firstName is Invalid")
     private String firstName;
+
     /**
      * Regex validation pattern for lastname
      * [A-Z]{1} - Starting capital letter
@@ -36,7 +36,10 @@ public class EmployeeDTO {
     private String profilePic;
 
     @NotEmpty(message = "Department name cannot be null")
-    private String department;
+    private List<String> department;
+
+    @Pattern(regexp = "female|male ", message = "Gender needs to be male or female")
+    private String gender;
 
     @Min(value = 500, message = "Salary should be more than 500")
     private Long salary;

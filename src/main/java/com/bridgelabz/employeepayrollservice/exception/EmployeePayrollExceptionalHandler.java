@@ -19,7 +19,9 @@ import java.util.stream.Collectors;
  * - Created to handle controller class exception
  */
 @ControllerAdvice
+// create a class name as EmployeePayrollExceptionalHandler
 public class EmployeePayrollExceptionalHandler {
+
     /**
      * @ExceptionHandler :-
      *        is an annotation used to handle the specific exceptions and sending the custom responses to the client.
