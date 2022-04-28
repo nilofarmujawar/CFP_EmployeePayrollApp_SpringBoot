@@ -1,91 +1,159 @@
-package com.bridgelabz.addressbook.controller;
+package com.bridgelabz.employeepayrollservice.controller;
 
-/**
- * import classes
- */
-import com.bridgelabz.addressbook.model.AddressBook;
-import com.bridgelabz.addressbook.repository.AddressBookRepository;
+import com.bridgelabz.employeepayrollservice.dto.EmployeeDTO;
+import com.bridgelabz.employeepayrollservice.dto.ResponseDTO;
+import com.bridgelabz.employeepayrollservice.exception.EmployeePayrollException;
+import com.bridgelabz.employeepayrollservice.model.Employee;
+import com.bridgelabz.employeepayrollservice.service.EmployeePayrollService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * Created controller class to make api calls
+ *  1) @RestController :-
+ *           @RestController is used for making restful web services with the help of the @RestController annotation.
+ *           This annotation is used at the class level and allows the class to handle the requests made by the client
+ * 2) @RequestMapping :-
+ *           @RequestMapping used to map web requests onto specific handler classes and/or handler methods.
+ *           RequestMapping can be applied to the controller class as well as methods
+ *
+ * - Created controller so that we can perform rest api calls
  */
 @RestController
-@RequestMapping("/addressbook")
-public class AddressBookController {
+@RequestMapping("/employeepayrollservice")
+
+// create a class name as EmployeePayrollController
+public class EmployeePayrollController {
+
     /**
-     * Autowired AddressBookRepository so we can inject its dependency here
+     * 3) @AutoMapping :-
+     *          @Autowiring feature of spring framework enables you to inject the object dependency implicitly.
+     *          It internally uses setter or constructor injection.
+     *
+     * - Autowired IEmployeePayrollService interface so we can inject its dependency here
      */
     @Autowired
-    AddressBookRepository repository;
+    EmployeePayrollService service;
 
     /**
+     * 4) @GetMapping :-
+     *           @GetMapping annotation maps HTTP GET requests onto specific handler methods.
+     *           It is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod. GET)
+     *
      * - Ability to display welcome message
-     * @return- welcome msg
+     * @return :- welcome msg
      */
-    @GetMapping("")
-    public String getMessage() {
-        return "Welcome to Address Book App";
+
+    @GetMapping("/welcome")
+    public ResponseEntity<String> getWelcome() {
+        String welcome = service.getWelcome();
+        return new ResponseEntity<String>(welcome, HttpStatus.OK);
     }
 
     /**
-     * Create api call to save data to repository
-     * @param addressBook - person all data
-     * @return- accepts the address book data in JSON format and stores it in DB
+     * 4) @PostMapping :-
+     *           @PostMapping annotation maps HTTP POST requests onto specific handler methods.
+     *           It is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod. POST)
+     *
+     * 5) @RequestBody :-
+     *            @RequestBody annotation is applicable to handler methods of Spring controllers.
+     *            This annotation indicates that Spring should deserialize a request body into an object.
+     *            This object is passed as a handler method parameter
+     *
+     * - Ability to save employee details to repository
+     * @apiNote- accepts the employee data in JSON format and stores it in DB
+     * @param employeeDTO - employee data
+     * @return :- newemployee data
      */
-    @PostMapping("/post")
-    public AddressBook postAddress(@RequestBody AddressBook addressBook) {
-        AddressBook newAddressBook = new AddressBook(addressBook);
-        repository.save(newAddressBook);
-        return newAddressBook;
+    @PostMapping("/create")
+    public ResponseEntity<String> addDataToRepo(@Valid @RequestBody EmployeeDTO employeeDTO) {
+        Employee newEmployee = service.postDataToRepo(employeeDTO);
+        ResponseDTO responseDTO = new ResponseDTO("Record Added Succesfully", newEmployee);
+        return new ResponseEntity(responseDTO, HttpStatus.CREATED);
     }
 
     /**
-     * - Ability to get all address book data by findAll() method
+     * - Ability to get all employees' data by findAll() method
      * @return :- showing all data
      */
     @GetMapping("/get")
-    public List<AddressBook> getAddress() {
-        List<AddressBook> addressBook = repository.findAll();
-        return addressBook;
+    public ResponseEntity<String> getAllDataFromRepo() {
+        List<Employee> listOfEmployee = service.getAllData();
+        ResponseDTO responseDTO = new ResponseDTO("Record Retrieved Successfully", listOfEmployee);
+        return new ResponseEntity(responseDTO, HttpStatus.OK);
     }
 
     /**
-     * Ability to get person data by id
-     * @param id - person id
-     * @return - person information with same Id in JSON format
+     * 6) @PathVariable :-
+     *           @PathVariable is a Spring annotation which indicates that a method parameter should be bound to a URI template variable. It has the following optional elements: name - name of the path variable to bind to.
+     *           required - tells whether the path variable is required.
+     * - Ability to get employee data by id
+     * @param id - employee id
+     * @return -employee information with same empId in JSON format
      */
     @GetMapping("/get/{id}")
-    public AddressBook getAddressById(@PathVariable Integer id) {
-        Optional<AddressBook> addressBook = repository.findById(id);
-        return addressBook.get();
+    public ResponseEntity<String> getDataFromRepoById(@PathVariable Integer id) throws EmployeePayrollException {
+        Employee existingEmployee = service.getDataById(id);
+        ResponseDTO responseDTO = new ResponseDTO("Record for given ID Retrieved Successfully", existingEmployee);
+        return new ResponseEntity(responseDTO, HttpStatus.OK);
     }
 
     /**
-     * Ability to update address book person data for particular id
-     * @param id - person id
-     * @param addressBook - person data
-     * @return - accepts the address book data in JSON format and updates the address book having same id from database
+     * 7) @PutMapping :-
+     *            @PutMapping Annotation for mapping HTTP PUT requests onto specific handler methods.
+     *            Specifically, @PutMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.PUT).
+     *
+     * Ability to update employee data for particular id
+     * @apiNote - accepts the employee data in JSON format and updates the employee having same empId from database
+     * @param id - employee id
+     * @param employeeDTO -  represents object of EmployeeDTO class
+     * @return - updated employee information in JSON format
      */
-    @PutMapping("/updateData/{id}")
-    public AddressBook updateById(@PathVariable Integer id, @RequestBody AddressBook addressBook) {
-        AddressBook newAddressBook = new AddressBook(addressBook, id);
-        repository.save(newAddressBook);
-        return newAddressBook;
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateDataInRepo(@PathVariable Integer id,
+                                                   @Valid @RequestBody EmployeeDTO employeeDTO)
+            throws EmployeePayrollException {
+        Employee updatedEmployee = service.updateDataById(id, employeeDTO);
+        ResponseDTO responseDTO = new ResponseDTO("Record for particular ID Updated Successfully", updatedEmployee);
+        return new ResponseEntity(responseDTO, HttpStatus.ACCEPTED);
     }
 
     /**
-     * - Ability to delete person data for particular id
-     * @param id - person id in address book
-     * @return -person Id and Acknowledgment message
+     * - Ability to delete employee data for particular id
+     * @apiNote - accepts the empId and deletes the data of that employee from DB
+     * @param id - represents employee id
+     * @return -  empId and Acknowledgment message
      */
     @DeleteMapping("/delete/{id}")
-    public String deleteAddress(@PathVariable Integer id) {
-        repository.deleteById(id);
-        return "Address of id: " + id + " has been deleted";
+    public ResponseEntity<String> deleteDataInRepo(@PathVariable Integer id) throws EmployeePayrollException {
+        ResponseDTO responseDTO = new ResponseDTO
+                ("Record for particular ID Deleted Successfully", service.deleteDataById(id));
+        return new ResponseEntity(responseDTO, HttpStatus.ACCEPTED);
     }
+
+    /**
+     * - Ability to get employee data by department name
+     * @param department - employee department
+     * @return - get data by employee department
+     * @throws EmployeePayrollException
+     */
+    @GetMapping("/getbydepartment/{department}")
+    public ResponseEntity<ResponseDTO> getRecordFromRepoByDepartment(@PathVariable String department) throws EmployeePayrollException {
+        List<Employee> newEmployee = service.getDataByDepartment(department);
+        ResponseDTO dto = new ResponseDTO("Record for given Department Retrieved Successfully", newEmployee);
+        return new ResponseEntity(dto, HttpStatus.OK);
+
+    }
+    @GetMapping("/getbygender/{gender}")
+    public ResponseEntity<ResponseDTO> getRecordFromRepoByGender(@PathVariable String gender) throws EmployeePayrollException {
+        List<Employee> newEmployee = service.getDataByGender(gender);
+        ResponseDTO dto = new ResponseDTO("Record for given Department Retrieved Successfully", newEmployee);
+        return new ResponseEntity(dto, HttpStatus.OK);
+
+    }
+
 }
